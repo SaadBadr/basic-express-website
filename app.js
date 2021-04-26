@@ -20,5 +20,16 @@ app.get('/about', (req, res) => {
     res.render('about', {title: "About us!"})
 })
 
+app.get('/contact', (req, res) => {
+    res.render('contact')
+})
+
+
+
+app.post('/contact/send', (req, res) => {
+    console.log('test')
+})
+
+
 app.listen(port)
 console.log(`app is running at port ${port}`)
