@@ -2,7 +2,8 @@ const express = require('express')
 const path = require('path')
 const nodemailer = require('nodemailer')
 
-const port = 3000
+require('dotenv').config()
+const port = process.env.PORT
 const app  = express()
 
 app.set('views', path.join(__dirname, 'views'))
@@ -27,7 +28,25 @@ app.get('/contact', (req, res) => {
 
 
 app.post('/contact/send', (req, res) => {
-    console.log('test')
+    const transporter = nodemailer.createTransport({
+        service: process.env.EMAIL_SERVICE,
+        auth: {
+            user: process.env.USER,
+            pass: process.env.PASS
+        }
+    })
+
+    const mailOptions = {
+        from: process.env.USER,
+        to: process.env.SUPPORT_MAIL,
+        text: `You have message from Name: ${req.body.name}, EMAIL: ${req.body.email}, message: ${req.body.message}`
+        
+    }
+
+    transporter.sendMail(mailOptions, (err, info) => {
+        console.log(err || `MSG INFO ${info.response}`)
+        res.redirect('/')
+    })
 })
 
 
